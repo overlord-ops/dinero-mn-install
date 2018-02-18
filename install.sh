@@ -12,7 +12,7 @@ STRING5="Switching to Aptitude"
 STRING6="Some optional installs"
 STRING7="Starting your masternode"
 STRING8="Now, you need to finally start your masternode in the following order:"
-STRING9="Go to your windows/mac wallet and from the Control wallet debug console please enter"
+STRING9="Go to your windows/mac wallet and complete modify masternode.conf, then restart and from the Control wallet debug console please enter"
 STRING10="masternode start-alias <mymnalias>"
 STRING11="where <mymnalias> is the name of your masternode alias (without brackets)"
 STRING12="once completed please return to VPS and press the space bar"
@@ -69,9 +69,14 @@ echo $STRING6
     dinerocore-1.0.0/bin/dinerod -daemon
     clear
  
- sleep 20
+ sleep 10
+
+ cd
 
  dinerocore-1.0.0/bin/dinero-cli stop
+
+sleep 20
+
 
 #Setting up coin
     clear
@@ -109,14 +114,14 @@ sudo apt-get install -y virtualenv
 virtualenv venv
 venv/bin/pip install -r requirements.txt
 
-
-#Starting coin
-    (crontab -l 2>/dev/null; echo '@reboot sleep 30 && dinerod -daemon -shrinkdebugfile') | crontab
-    (crontab -l 2>/dev/null; echo '* * * * * cd /root/.dinerocore/sentinel && ./venv/bin/python bin/sentinel.py >/$') | crontab
-
 cd
 
 dinerocore-1.0.0/bin/dinerod -daemon
+
+#Starting coin
+    (crontab -l 2>/dev/null; echo '@reboot sleep 30 && cd /root/dinerocore-1.0.0/bin/dinerod -daemon -shrinkdebugfile') | crontab
+    (crontab -l 2>/dev/null; echo '* * * * * cd /root/.dinerocore/sentinel && ./venv/bin/python bin/sentinel.py >/$') | crontab
+
 
     clear
 echo $STRING2
