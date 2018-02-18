@@ -12,7 +12,7 @@ STRING5="Switching to Aptitude"
 STRING6="Some optional installs"
 STRING7="Starting your masternode"
 STRING8="Now, you need to finally start your masternode in the following order:"
-STRING9="Go to your windows/mac wallet and complete modify masternode.conf, then restart and from the Control wallet debug console please enter"
+STRING9="Go to your windows/mac wallet and modify masternode.conf as required, then restart and from the Control wallet debug console please enter"
 STRING10="masternode start-alias <mymnalias>"
 STRING11="where <mymnalias> is the name of your masternode alias (without brackets)"
 STRING12="once completed please return to VPS and press the space bar"
@@ -62,32 +62,10 @@ echo $STRING6
     sudo ufw enable -y
     fi
 
-#Install Dinero Daemon
-    wget https://github.com/dinerocoin/dinero/releases/download/v1.0.0.7/dinerocore-1.0.0.7-linux64.tar.gz
-    sudo tar -xzvf dinerocore-1.0.0.7-linux64.tar.gz
-    sudo rm dinerocore-1.0.0.7-linux64.tar.gz
-    dinerocore-1.0.0/bin/dinerod -daemon
-    clear
- 
- sleep 10
-
- cd
-
- dinerocore-1.0.0/bin/dinero-cli stop
-
-sleep 20
-
-
-#Setting up coin
-    clear
-echo $STRING2
-echo $STRING13
-echo $STRING3
-echo $STRING13
-echo $STRING4
-sleep 10
 
 #Create dinero.conf
+
+mkdir .dinerocore
 echo '
 rpcuser='$password'
 rpcpassword='$password2'
@@ -103,6 +81,27 @@ externalip='$ip'
 ' | sudo -E tee ~/.dinerocore/dinero.conf >/dev/null 2>&1
     sudo chmod 0600 ~/.dinerocore/dinero.conf
 
+echo 'conf created'
+
+sleep 40
+
+#Install Dinero Daemon
+    wget https://github.com/dinerocoin/dinero/releases/download/v1.0.0.7/dinerocore-1.0.0.7-linux64.tar.gz
+    sudo tar -xzvf dinerocore-1.0.0.7-linux64.tar.gz
+    sudo rm dinerocore-1.0.0.7-linux64.tar.gz
+    dinerocore-1.0.0/bin/dinerod -daemon
+    clear
+ 
+ sleep 10
+
+#Setting up coin
+    clear
+echo $STRING2
+echo $STRING13
+echo $STRING3
+echo $STRING13
+echo $STRING4
+sleep 10
 
 #Install Sentinel
 cd /root/.dinerocore
@@ -142,7 +141,8 @@ echo $STRING11
 echo $STRING13
 echo $STRING12
     sleep 120
-    
-    read -p "Press any key to continue... " -n1 -s
-    dinerocore-1.0.0/bin/dinero-cli getinfo
-    dinero-cli masternode status
+
+cd
+
+read -p "(this message will remain for at least 120 seconds) Then press any key to continue... " -n1 -s
+dinerocore-1.0.0/bin/dinero-cli getinfo
