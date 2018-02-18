@@ -85,6 +85,14 @@ echo 'conf created'
 
 sleep 40
 
+    clear
+ echo $STRING2
+ echo $STRING13
+ echo $STRING3 
+ echo $STRING13
+ echo $STRING4    
+
+
 #Install Dinero Daemon
     wget https://github.com/dinerocoin/dinero/releases/download/v1.0.0.7/dinerocore-1.0.0.7-linux64.tar.gz
     sudo tar -xzvf dinerocore-1.0.0.7-linux64.tar.gz
@@ -143,6 +151,12 @@ echo $STRING12
     sleep 120
 
 cd
+    clear
+ echo $STRING2
+ echo $STRING13
+ echo $STRING3 
+ echo $STRING13
+ echo $STRING4    
 
 read -p "(this message will remain for at least 120 seconds) Then press any key to continue... " -n1 -s
 dinerocore-1.0.0/bin/dinero-cli getinfo
