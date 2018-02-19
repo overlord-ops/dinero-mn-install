@@ -65,7 +65,7 @@ echo $STRING6
 
 #Create dinero.conf
 
-mkdir .dinerocore
+sudo mkdir .dinerocore
 echo '
 rpcuser='$password'
 rpcpassword='$password2'
@@ -81,7 +81,7 @@ externalip='$ip'
 ' | sudo -E tee ~/.dinerocore/dinero.conf >/dev/null 2>&1
     sudo chmod 0600 ~/.dinerocore/dinero.conf
 
-echo 'conf created'
+echo 'dinero.conf created'
 
 sleep 40
 
