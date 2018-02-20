@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd
-
+whoami=`whoami`
 clear
 # declare STRING variable
 STRING1="Make sure you double check before pressing enter! One chance at this only!"
@@ -32,7 +32,7 @@ echo $STRING1
  echo $STRING3 
  echo $STRING13
  echo $STRING4    
-    sleep 10    
+    sleep 2
 
 # update package and upgrade Ubuntu
     sudo apt-get -y update
@@ -51,6 +51,10 @@ echo $STRING6
     if [[ ("$install_fail2ban" == "y" || "$install_fail2ban" == "Y" || "$install_fail2ban" == "") ]]; then
     cd ~
     sudo aptitude -y install fail2ban
+    cd && awk '{ printf "# "; print; }' /etc/fail2ban/jail.conf | sudo tee /etc/fail2ban/jail.local
+    cd /etc/fail2ban/
+    sed -i 's/bantime  = 600/bantime  = 10000/1' jail.conf
+    sed -i 's/findtime  = 600/findtime  = 10000 /1' jail.conf
     sudo service fail2ban restart 
     fi
     if [[ ("$UFW" == "y" || "$UFW" == "Y" || "$UFW" == "") ]]; then
@@ -59,7 +63,7 @@ echo $STRING6
     sudo ufw default allow outgoing
     sudo ufw allow ssh
     sudo ufw allow 26285/tcp
-    sudo ufw enable -y
+    sudo ufw --force enable
     fi
 
 
@@ -79,37 +83,35 @@ masternodeprivkey='$key'
 externalip='$ip'
 
 ' | sudo -E tee ~/.dinerocore/dinero.conf >/dev/null 2>&1
-    sudo chmod 0600 ~/.dinerocore/dinero.conf
+    sudo chmod 0755 ~/.dinerocore/dinero.conf
 
 echo 'dinero.conf created'
 
-sleep 40
+sleep 4
 
     clear
  echo $STRING2
  echo $STRING13
- echo $STRING3 
- echo $STRING13
  echo $STRING4    
-
 
 #Install Dinero Daemon
     wget https://github.com/dinerocoin/dinero/releases/download/v1.0.0.7/dinerocore-1.0.0.7-linux64.tar.gz
     sudo tar -xzvf dinerocore-1.0.0.7-linux64.tar.gz
     sudo rm dinerocore-1.0.0.7-linux64.tar.gz
+    sudo chown -R $whoami:$whoami dinerocore-1.0.0/
+    sudo chmod -R 0755 dinerocore-1.0.0/
     dinerocore-1.0.0/bin/dinerod -daemon
     clear
  
- sleep 10
+ sleep 3
 
 #Setting up coin
     clear
 echo $STRING2
 echo $STRING13
-echo $STRING3
 echo $STRING13
 echo $STRING4
-sleep 10
+sleep 3
 
 #Install Sentinel
 cd /root/.dinerocore
@@ -121,8 +123,17 @@ sudo apt-get install -y virtualenv
 virtualenv venv
 venv/bin/pip install -r requirements.txt
 
+#Confirm permissions are squared away
 cd
+sudo chown -R $whoami:$whoami dinercore-1.0.0/
+sudo chown -R $whoami:$whoami sentinel/
+sudo chown -R $whoami:$whoami .dinerocore/
+sudo chmod -R 0755 dinerocore-1.0.0/
+sudo chmod -R 0755 sentinel/
+sudo chmod -R 0755 .dinerocore/
 
+dinerocore-1.0.0/bin/dinero-cli stop
+sleep 10s
 dinerocore-1.0.0/bin/dinerod -daemon
 
 #Starting coin
@@ -136,7 +147,7 @@ echo $STRING13
 echo $STRING3
 echo $STRING13
 echo $STRING4
-    sleep 10
+    sleep 3
 echo $STRING7
 echo $STRING13
 echo $STRING8 
@@ -154,7 +165,6 @@ cd
     clear
  echo $STRING2
  echo $STRING13
- echo $STRING3 
  echo $STRING13
  echo $STRING4    
 
